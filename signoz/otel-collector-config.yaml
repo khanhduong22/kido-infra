@@ -48,6 +48,24 @@ receivers:
     endpoint: redis:6379
     collection_interval: 60s
 
+  filelog/containers:
+    include:
+      - /var/lib/docker/containers/*/*.log
+    start_at: end
+    include_file_path: true
+    include_file_name: false
+    operators:
+      - type: json_parser
+        id: parser-docker
+        output: extract_metadata_from_docker
+        timestamp:
+          parse_from: attributes.time
+          layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+      - type: move
+        id: extract_metadata_from_docker
+        from: attributes.log
+        to: body
+
   prometheus:
     config:
       global:
@@ -151,7 +169,7 @@ service:
       processors: [resourcedetection, batch]
       exporters: [signozclickhousemetrics, metadataexporter, signozmeter]
     logs:
-      receivers: [otlp]
+      receivers: [otlp, filelog/containers]
       processors: [resourcedetection, batch]
       exporters: [clickhouselogsexporter, metadataexporter, signozmeter]
     metrics/meter:
