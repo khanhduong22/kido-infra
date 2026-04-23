@@ -1,0 +1,47 @@
+groups:
+- name: VPS_Critical_Alerts
+  rules:
+  - alert: HostOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Host out of memory (instance {{ $labels.instance }})"
+      description: "Hệ thống đang cạn kiệt RAM! RAM trống hiện rớt xuống dưới 10%.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: HostHighCpuLoad
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Host high CPU load (instance {{ $labels.instance }})"
+      description: "CPU Load đang quá nóng (> 90% trong hơn 5 phút).\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: PostgresTooManyConnections
+    expr: sum(pg_stat_activity_count) > 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "PostgreSQL qúa tải Connection (instance {{ $labels.instance }})"
+      description: "PostgreSQL đang hứng chịu cục load hơn 80 Connection (Giới hạn của mình là 100 max). Chú ý sập Database!\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: ScraperBullMQJobFailed
+    expr: rate(bullmq_job_failed_total[5m]) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Job Cào Data Ngỏm: {{ $labels.job_name }}"
+      description: "Thằng cào data báo lỗi toàn tập sau 3 lần Retry cố gắng. Check log mẹ nó gấp! Tên Job chết: {{ $labels.job_name }}"
+
+  - alert: HostHighSysLoad
+    expr: (node_load5 / count by (instance) (node_cpu_seconds_total{mode="idle"})) * 100 > 100
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Kẹt Xe Trầm Trọng: Sys Load vượt 100% (instance {{ $labels.instance }})"
+      description: "Hệ thống đang quá tải hàng đợi (Load Average vọt lên mốc đỏ). Rất có khả năng kẹt Disk I/O, hết phần cứng hoặc đạn quạt liên tục trong 5 phút qua mà không tiêu hoá kịp!\n  Mức Load = {{ $value }}%\n  LABELS = {{ $labels }}"
