@@ -53,6 +53,20 @@ services:
       timeout: 10s
       retries: 3
 
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "81:81"     # UI Port
+      - "8081:80"   # HTTP Port (Mapped to 8081 to avoid conflict with native Nginx)
+      - "4443:443"  # HTTPS Port (Mapped to 4443 to avoid conflict with native Nginx)
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - ops_bridge
+
 networks:
   ops_bridge:
     external: true
@@ -60,3 +74,5 @@ networks:
 volumes:
   portainer_data:
   uptime-kuma-data:
+  npm_data:
+  npm_letsencrypt:
