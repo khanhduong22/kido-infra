@@ -188,6 +188,21 @@ services:
         /signoz-otel-collector migrate async up
     restart: on-failure
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=KidoOps2026!
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - signoz-net
+      - ops_bridge
+
 
 networks:
   signoz-net:
@@ -202,5 +217,8 @@ volumes:
     name: signoz-sqlite
   zookeeper-1:
     name: signoz-zookeeper-1
+  grafana_data:
+    external: true
+    name: grafana_grafana_data
 
 
