@@ -51,6 +51,9 @@ receivers:
   redis:
     endpoint: redis:6379
     collection_interval: 60s
+  nginx:
+    endpoint: "http://nginx-proxy-manager:8090/nginx_status"
+    collection_interval: 10s
 
   filelog/containers:
     include:
@@ -169,7 +172,7 @@ service:
       processors: [signozspanmetrics/delta, batch]
       exporters: [clickhousetraces, metadataexporter, signozmeter]
     metrics:
-      receivers: [otlp, hostmetrics, docker_stats, postgresql, redis]
+      receivers: [otlp, hostmetrics, docker_stats, postgresql, redis, nginx]
       processors: [resourcedetection, batch]
       exporters: [signozclickhousemetrics, metadataexporter, signozmeter]
     metrics/prometheus:
