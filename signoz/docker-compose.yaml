@@ -219,6 +219,6 @@ volumes:
     name: signoz-zookeeper-1
   grafana_data:
     external: true
-    name: grafana_grafana_data
+    name: monitoring_grafana_data
 
 
