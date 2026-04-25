@@ -162,6 +162,7 @@ services:
       - HOST_VAR=/hostfs/var
       - HOST_RUN=/hostfs/run
       - HOST_DEV=/hostfs/dev
+      - GH_PAT=${GH_PAT}
     ports:
       # - "1777:1777"     # pprof extension
       - "5317:4317" # OTLP gRPC receiver

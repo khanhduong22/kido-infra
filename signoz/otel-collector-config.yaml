@@ -55,6 +55,18 @@ receivers:
     endpoint: "http://nginx-proxy-manager:8090/nginx_status"
     collection_interval: 10s
 
+  github:
+    scrapers:
+      scraper:
+        github_org: khanhduong22
+        metrics:
+          vcs.ref.count:
+            enabled: true
+          vcs.contributor.count:
+            enabled: true
+        auth:
+          authenticator: bearertokenauth/github
+
   filelog/containers:
     include:
       - /var/lib/docker/containers/*/*.log
@@ -91,6 +103,11 @@ receivers:
             labels:
               job_name: vietnam-market-scraper
 processors:
+  resource/github:
+    attributes:
+      - key: service.name
+        value: "github-actions"
+        action: insert
   batch:
     send_batch_size: 10000
     send_batch_max_size: 11000
@@ -129,6 +146,8 @@ processors:
       - name: host.type
       - name: container.name
 extensions:
+  bearertokenauth/github:
+    token: "${env:GH_PAT}"
   bearertokenauth:
     scheme: "Bearer"
     token: "kido_super_secret_token_2026"
@@ -166,14 +185,15 @@ service:
     - health_check
     - pprof
     - bearertokenauth
+    - bearertokenauth/github
   pipelines:
     traces:
       receivers: [otlp]
       processors: [signozspanmetrics/delta, batch]
       exporters: [clickhousetraces, metadataexporter, signozmeter]
     metrics:
-      receivers: [otlp, hostmetrics, docker_stats, postgresql, redis, nginx]
-      processors: [resourcedetection, batch]
+      receivers: [otlp, hostmetrics, docker_stats, postgresql, redis, nginx, github]
+      processors: [resource/github, resourcedetection, batch]
       exporters: [signozclickhousemetrics, metadataexporter, signozmeter]
     metrics/prometheus:
       receivers: [prometheus]
