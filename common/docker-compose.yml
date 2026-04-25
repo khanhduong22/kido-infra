@@ -13,7 +13,7 @@ services:
       - ops_bridge
     healthcheck:
       test: ["CMD", "/dozzle", "healthcheck"]
-      interval: 30s
+      interval: 60s
       timeout: 10s
       retries: 3
 
@@ -33,7 +33,7 @@ services:
       - ops_bridge
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:9000/api/system/status"]
-      interval: 30s
+      interval: 60s
       timeout: 10s
       retries: 3
 
@@ -49,7 +49,7 @@ services:
       - ops_bridge
     healthcheck:
       test: ["CMD", "node", "extra/healthcheck.js"]
-      interval: 30s
+      interval: 60s
       timeout: 10s
       retries: 3
 
