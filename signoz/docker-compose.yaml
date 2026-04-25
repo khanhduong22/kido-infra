@@ -163,10 +163,12 @@ services:
       - HOST_RUN=/hostfs/run
       - HOST_DEV=/hostfs/dev
       - GH_PAT=${GH_PAT}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
     ports:
       # - "1777:1777"     # pprof extension
       - "5317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP HTTP receiver
+      - "19418:19418" # GitHub Webhook receiver
     networks:
       - signoz-net
       - ops_bridge
