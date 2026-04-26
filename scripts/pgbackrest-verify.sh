@@ -13,7 +13,7 @@ LOG="/var/log/pgbackrest/verify-$(date +%Y%m%d-%H%M%S).log"
 
 notify() {
   local emoji="$1" msg="$2"
-  curl -s -X POST "https://api.telegram.org/botREDACTED/sendMessage" \
+  curl -s -X POST "https://api.telegram.org/$TELEGRAM_BOT_TOKEN/sendMessage" \
     -H "Content-Type: application/json" \
     -d "{\"chat_id\": REDACTED, \"text\": \"${emoji} pgBackRest Restore Verify\n${msg}\nTime: $(date '+%Y-%m-%d %H:%M')\"}" > /dev/null 2>&1
 }
