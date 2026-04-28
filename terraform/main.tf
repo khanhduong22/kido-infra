@@ -24,6 +24,10 @@ terraform {
       source  = "carlpett/sops"
       version = "~> 1.1"
     }
+    grafana = {
+      source  = "grafana/grafana"
+      version = "~> 3.0"
+    }
   }
 }
 
@@ -47,4 +51,9 @@ provider "nginxproxymanager" {
   url      = "http://${data.sops_file.secrets.data["shared_vps_host"]}:81"
   username = data.sops_file.secrets.data["npm_email"]
   password = data.sops_file.secrets.data["npm_password"]
+}
+
+provider "grafana" {
+  url  = "https://grafana.khanhdp.com"
+  auth = data.sops_file.secrets.data["grafana_auth_token"]
 }
