@@ -12,7 +12,7 @@ locals {
     "tools"     = { host = "it-tools", port = 80 }      # Chú ý port nội bộ là 80, pub là 8086
 
     "npm"       = { host = "nginx-proxy-manager", port = 81 }
-    "signoz"    = { host = "signoz", port = 8080 }              # Nội bộ là 8080 (theo ảnh Portainer)
+    "signoz"    = { host = "172.17.0.1", port = 8088 }              # SigNoz nằm khác network nên dùng Docker host IP và port map ra ngoài
     "otel"      = { host = "signoz-otel-collector", port = 4318 } # Đưa về port HTTP OTLP chuẩn 4318
   }
 }
