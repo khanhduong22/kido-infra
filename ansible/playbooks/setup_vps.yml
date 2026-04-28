@@ -1,0 +1,9 @@
+---
+- name: Setup VPS Base Environment
+  hosts: all
+  become: yes # Chạy với quyền sudo
+  gather_facts: yes
+  
+  roles:
+    - system
+    - docker

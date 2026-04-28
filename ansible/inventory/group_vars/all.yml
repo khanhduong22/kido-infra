@@ -1,0 +1,4 @@
+---
+# Các biến dùng chung
+docker_compose_version: "2.26.1"
+timezone: "Asia/Ho_Chi_Minh"

@@ -1,0 +1,27 @@
+---
+- name: Ensure target directory exists
+  file:
+    path: /opt/kido-infra
+    state: directory
+    mode: '0755'
+
+- name: Sync compose files and configurations to VPS
+  synchronize:
+    src: "{{ playbook_dir }}/../../docker-compose.yml"
+    dest: /opt/kido-infra/docker-compose.yml
+
+- name: Sync SOPS encrypted environment variables
+  synchronize:
+    src: "{{ playbook_dir }}/../../terraform/secrets.enc.json"
+    dest: /opt/kido-infra/secrets.enc.json
+
+# Trong thực tế, bạn sẽ dùng sops command trực tiếp trên VPS hoặc qua ansible sops plugin để giải mã,
+# hoặc copy thẳng file .env đã được giải mã từ Local lên Server qua memory (Ansible Template).
+# Tạm thời ta chỉ copy file secrets lên trước.
+
+- name: Bring up Docker Compose services
+  command: docker compose up -d
+  args:
+    chdir: /opt/kido-infra
+  register: compose_output
+  changed_when: "'Running' in compose_output.stdout or 'Started' in compose_output.stdout"

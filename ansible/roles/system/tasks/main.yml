@@ -1,0 +1,27 @@
+---
+- name: Update apt cache and install basic packages
+  apt:
+    name:
+      - curl
+      - git
+      - htop
+      - zsh
+      - ufw
+      - jq
+      - unzip
+    state: present
+    update_cache: yes
+
+- name: Set timezone to {{ timezone }}
+  timezone:
+    name: "{{ timezone }}"
+
+- name: Enable UFW firewall and allow OpenSSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    policy: deny
