@@ -76,6 +76,27 @@ services:
     networks:
       - ops_bridge
 
+  signoz-telegram-proxy:
+    image: node:20-alpine
+    container_name: signoz-telegram-proxy
+    ports:
+      - "127.0.0.1:9200:9200"
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./signoz-telegram-proxy.js:/app/server.js:ro
+    command: node server.js
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+    networks:
+      - ops_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
 networks:
   ops_bridge:
     external: true
@@ -85,4 +106,3 @@ volumes:
   uptime-kuma-data:
   npm_data:
   npm_letsencrypt:
-
