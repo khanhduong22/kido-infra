@@ -108,7 +108,9 @@ services:
       - ops_bridge
 
   gitnexus-server:
-    image: ghcr.io/abhigyanpatwari/gitnexus:latest
+    build:
+      context: https://github.com/abhigyanpatwari/GitNexus.git#main
+      dockerfile: Dockerfile.cli
     container_name: gitnexus-server
     restart: unless-stopped
     volumes:
@@ -118,7 +120,9 @@ services:
       - ops_bridge
 
   gitnexus-web:
-    image: ghcr.io/abhigyanpatwari/gitnexus-web:latest
+    build:
+      context: https://github.com/abhigyanpatwari/GitNexus.git#main
+      dockerfile: Dockerfile.web
     container_name: gitnexus-web
     restart: unless-stopped
     depends_on:
