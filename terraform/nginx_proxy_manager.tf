@@ -15,6 +15,7 @@ locals {
     "signoz"    = { host = "172.17.0.1", port = 8088 }              # SigNoz nằm khác network nên dùng Docker host IP và port map ra ngoài
     "otel"      = { host = "signoz-otel-collector", port = 4318 } # Đưa về port HTTP OTLP chuẩn 4318
     "gkg"       = { host = "gkg", port = 27495 }
+    "gitnexus"  = { host = "gitnexus", port = 80 }
   }
 }
 

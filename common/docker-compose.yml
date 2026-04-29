@@ -107,6 +107,37 @@ services:
     networks:
       - ops_bridge
 
+  gitnexus-server:
+    image: ghcr.io/abhigyanpatwari/gitnexus:latest
+    container_name: gitnexus-server
+    restart: unless-stopped
+    volumes:
+      - /opt:/workspace:ro
+      - gitnexus_data:/data/gitnexus
+    networks:
+      - ops_bridge
+
+  gitnexus-web:
+    image: ghcr.io/abhigyanpatwari/gitnexus-web:latest
+    container_name: gitnexus-web
+    restart: unless-stopped
+    depends_on:
+      - gitnexus-server
+    networks:
+      - ops_bridge
+
+  gitnexus:
+    image: nginx:alpine
+    container_name: gitnexus
+    restart: unless-stopped
+    volumes:
+      - ../docker/gitnexus/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - gitnexus-server
+      - gitnexus-web
+    networks:
+      - ops_bridge
+
 networks:
   ops_bridge:
     external: true
@@ -116,3 +147,4 @@ volumes:
   uptime-kuma-data:
   npm_data:
   npm_letsencrypt:
+  gitnexus_data:

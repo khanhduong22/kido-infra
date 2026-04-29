@@ -18,7 +18,8 @@ locals {
     "portainer",
     "signoz",
     "tools",
-    "gkg"
+    "gkg",
+    "gitnexus"
   ]
 }
 
