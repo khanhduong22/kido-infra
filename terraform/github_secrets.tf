@@ -16,3 +16,15 @@ resource "github_actions_secret" "scraper_vps_host" {
   secret_name     = "VPS_HOST"
   plaintext_value = data.sops_file.secrets.data["shared_vps_host"]
 }
+
+resource "github_actions_secret" "scraper_vapid_public_key" {
+  repository      = "vietnam-market-scraper"
+  secret_name     = "VAPID_PUBLIC_KEY"
+  plaintext_value = data.sops_file.secrets.data["vapid_public_key"]
+}
+
+resource "github_actions_secret" "scraper_vapid_private_key" {
+  repository      = "vietnam-market-scraper"
+  secret_name     = "VAPID_PRIVATE_KEY"
+  plaintext_value = data.sops_file.secrets.data["vapid_private_key"]
+}
