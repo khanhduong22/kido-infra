@@ -103,7 +103,7 @@ services:
     container_name: gkg
     restart: unless-stopped
     volumes:
-      - /opt:/workspace:ro
+      - /opt:/workspace
     networks:
       - ops_bridge
 
@@ -114,7 +114,7 @@ services:
     container_name: gitnexus-server
     restart: unless-stopped
     volumes:
-      - /opt:/workspace:ro
+      - /opt:/workspace
       - gitnexus_data:/data/gitnexus
     networks:
       - ops_bridge
