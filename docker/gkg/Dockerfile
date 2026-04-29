@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-RUN apt-get update && apt-get install -y curl git ca-certificates bash && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl git ca-certificates bash socat && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://gitlab.com/gitlab-org/rust/knowledge-graph/-/raw/main/install.sh | bash
 ENV PATH="/root/.local/bin:${PATH}"

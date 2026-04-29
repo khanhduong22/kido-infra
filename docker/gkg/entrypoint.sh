@@ -8,4 +8,6 @@ git config --global --add safe.directory /workspace || true
 gkg index
 
 echo "Starting Knowledge Graph Server..."
-exec gkg server start --host 0.0.0.0 --port 27495
+gkg server start --port 27496 &
+sleep 2
+exec socat TCP-LISTEN:27495,fork,bind=0.0.0.0 TCP:127.0.0.1:27496
