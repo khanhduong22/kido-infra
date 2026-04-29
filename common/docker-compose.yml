@@ -97,6 +97,16 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  gkg:
+    build:
+      context: ../docker/gkg
+    container_name: gkg
+    restart: unless-stopped
+    volumes:
+      - /opt:/workspace:ro
+    networks:
+      - ops_bridge
+
 networks:
   ops_bridge:
     external: true

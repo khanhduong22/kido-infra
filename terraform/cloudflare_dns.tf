@@ -17,7 +17,8 @@ locals {
     "otel",
     "portainer",
     "signoz",
-    "tools"
+    "tools",
+    "gkg"
   ]
 }
 

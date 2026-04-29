@@ -5,10 +5,15 @@
     state: directory
     mode: '0755'
 
-- name: Sync compose files and configurations to VPS
+- name: Sync common directory
   synchronize:
-    src: "{{ playbook_dir }}/../../docker-compose.yml"
-    dest: /opt/kido-infra/docker-compose.yml
+    src: "{{ playbook_dir }}/../../common/"
+    dest: /opt/kido-infra/common/
+
+- name: Sync docker directory
+  synchronize:
+    src: "{{ playbook_dir }}/../../docker/"
+    dest: /opt/kido-infra/docker/
 
 - name: Sync SOPS encrypted environment variables
   synchronize:
@@ -19,9 +24,9 @@
 # hoặc copy thẳng file .env đã được giải mã từ Local lên Server qua memory (Ansible Template).
 # Tạm thời ta chỉ copy file secrets lên trước.
 
-- name: Bring up Docker Compose services
-  command: docker compose up -d
+- name: Bring up common Docker Compose services
+  command: docker compose up -d --build
   args:
-    chdir: /opt/kido-infra
+    chdir: /opt/kido-infra/common
   register: compose_output
   changed_when: "'Running' in compose_output.stdout or 'Started' in compose_output.stdout"
