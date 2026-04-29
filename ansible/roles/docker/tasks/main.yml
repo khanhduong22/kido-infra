@@ -9,15 +9,24 @@
       - lsb-release
     state: present
 
-- name: Add Docker GPG apt Key
-  apt_key:
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Docker GPG apt Key to keyring
+  get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+    force: yes
 
 - name: Add Docker Repository
   apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    repo: deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
     state: present
+    filename: docker
 
 - name: Install Docker Engine
   apt:
