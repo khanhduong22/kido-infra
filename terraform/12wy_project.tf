@@ -26,30 +26,35 @@ resource "github_actions_secret" "api_ssh_private_key" {
 }
 
 # --- 12 Week Year Dashboard (Frontend on Vercel) ---
-resource "vercel_project" "wy_dashboard" {
-  name      = "12-week-year-dashboard"
-  framework = "nextjs"
-
-  git_repository = {
-    type = "github"
-    repo = "khanhduong22/12-week-year-dashboard"
-  }
-
-  environment = [
-    {
-      key    = "NEXT_PUBLIC_API_URL"
-      value  = "https://12wy-api.khanhdp.com"
-      target = ["production", "preview", "development"]
-    },
-    {
-      key    = "NEXTAUTH_URL"
-      value  = "https://12weeks.khanhdp.com"
-      target = ["production"]
-    }
-  ]
-}
-
-resource "vercel_project_domain" "wy_dashboard_domain" {
-  project_id = vercel_project.wy_dashboard.id
-  domain     = "12weeks.khanhdp.com"
-}
+# NOTE: The Vercel API token in SOPS lacks permissions for the Team 'kidos-projects-f7b57ed5'.
+# Until a Team-scoped token is generated and updated in SOPS, this project is managed manually via Vercel CLI.
+#
+# resource "vercel_project" "wy_dashboard" {
+#   name      = "12-week-year-dashboard"
+#   team_id   = "team_Sf4YHziZbXR2cc11baVuMzLX"
+#   framework = "nextjs"
+#
+#   git_repository = {
+#     type = "github"
+#     repo = "khanhduong22/12-week-year-dashboard"
+#   }
+#
+#   environment = [
+#     {
+#       key    = "NEXT_PUBLIC_API_URL"
+#       value  = "https://12wy-api.khanhdp.com"
+#       target = ["production", "preview", "development"]
+#     },
+#     {
+#       key    = "NEXTAUTH_URL"
+#       value  = "https://12weeks.khanhdp.com"
+#       target = ["production"]
+#     }
+#   ]
+# }
+#
+# resource "vercel_project_domain" "wy_dashboard_domain" {
+#   project_id = vercel_project.wy_dashboard.id
+#   team_id    = "team_Sf4YHziZbXR2cc11baVuMzLX"
+#   domain     = "12weeks.khanhdp.com"
+# }
