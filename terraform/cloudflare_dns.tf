@@ -19,7 +19,9 @@ locals {
     "signoz",
     "tools",
     "gkg",
-    "gitnexus"
+    "gitnexus",
+    "12wy-api",
+    "12weeks"
   ]
 }
 

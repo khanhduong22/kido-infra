@@ -16,6 +16,8 @@ locals {
     "otel"      = { host = "signoz-otel-collector", port = 4318 } # Đưa về port HTTP OTLP chuẩn 4318
     "gkg"       = { host = "gkg", port = 27495 }
     "gitnexus"  = { host = "gitnexus", port = 80 }
+    "12wy-api"  = { host = "12wy_api", port = 3001 }
+    "12weeks"   = { host = "12wy_dashboard", port = 3000 }
   }
 }
 
