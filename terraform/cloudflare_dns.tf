@@ -20,8 +20,7 @@ locals {
     "tools",
     "gkg",
     "gitnexus",
-    "12wy-api",
-    "12weeks"
+    "12wy-api"
   ]
 }
 
@@ -44,6 +43,14 @@ resource "cloudflare_record" "proxied_records" {
 resource "cloudflare_record" "vercel_md" {
   zone_id = var.cloudflare_zone_id
   name    = "md" # Subdomain md.khanhdp.com
+  content = "cname.vercel-dns.com"
+  type    = "CNAME"
+  proxied = false 
+}
+
+resource "cloudflare_record" "vercel_12weeks" {
+  zone_id = var.cloudflare_zone_id
+  name    = "12weeks" # Subdomain 12weeks.khanhdp.com
   content = "cname.vercel-dns.com"
   type    = "CNAME"
   proxied = false 

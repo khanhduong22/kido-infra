@@ -24,3 +24,32 @@ resource "github_actions_secret" "api_ssh_private_key" {
   secret_name     = "SSH_PRIVATE_KEY"
   plaintext_value = file("~/.ssh/id_rsa")
 }
+
+# --- 12 Week Year Dashboard (Frontend on Vercel) ---
+resource "vercel_project" "wy_dashboard" {
+  name      = "12-week-year-dashboard"
+  framework = "nextjs"
+
+  git_repository = {
+    type = "github"
+    repo = "khanhduong22/12-week-year-dashboard"
+  }
+
+  environment = [
+    {
+      key    = "NEXT_PUBLIC_API_URL"
+      value  = "https://12wy-api.khanhdp.com"
+      target = ["production", "preview", "development"]
+    },
+    {
+      key    = "NEXTAUTH_URL"
+      value  = "https://12weeks.khanhdp.com"
+      target = ["production"]
+    }
+  ]
+}
+
+resource "vercel_project_domain" "wy_dashboard_domain" {
+  project_id = vercel_project.wy_dashboard.id
+  domain     = "12weeks.khanhdp.com"
+}
