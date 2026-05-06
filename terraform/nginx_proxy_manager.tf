@@ -17,6 +17,7 @@ locals {
     "gkg"       = { host = "gkg", port = 27495 }
     "gitnexus"  = { host = "gitnexus", port = 80 }
     "12wy-api"  = { host = "12wy_api", port = 3001 }
+    "p2p"       = { host = "p2p-frontend", port = 3001 }
   }
 }
 

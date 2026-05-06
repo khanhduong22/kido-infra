@@ -2,7 +2,8 @@ locals {
   # Add the names of repositories that should send webhooks to SigNoz
   repos = [
     "danang-badminton-hub",
-    "kido-infra"
+    "kido-infra",
+    "p2p-tracker"
   ]
 }
 
