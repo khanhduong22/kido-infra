@@ -6,7 +6,6 @@ locals {
   # "npm" = "Nginx Proxy Manager", "dozzle" = "Dozzle Logs", v.v.
   zero_trust_apps = {
     "gkg" = "GitLab Knowledge Graph"
-    "gitnexus" = "GitNexus Code Intelligence"
   }
 }
 

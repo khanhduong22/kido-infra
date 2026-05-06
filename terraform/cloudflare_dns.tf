@@ -19,7 +19,6 @@ locals {
     "signoz",
     "tools",
     "gkg",
-    "gitnexus",
     "12wy-api",
     "p2p"
   ]
