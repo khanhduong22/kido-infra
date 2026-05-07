@@ -17,25 +17,25 @@ services:
       timeout: 10s
       retries: 3
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - portainer_data:/data
-    ports:
-      - "9000:9000"
-    networks:
-      - ops_bridge
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'ok'"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
+#  portainer:
+#    image: portainer/portainer-ce:latest
+#    container_name: portainer
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - portainer_data:/data
+#    ports:
+#      - "9000:9000"
+#    networks:
+#      - ops_bridge
+#    healthcheck:
+#      test: ["CMD-SHELL", "echo 'ok'"]
+#      interval: 60s
+#      timeout: 10s
+#      retries: 3
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
