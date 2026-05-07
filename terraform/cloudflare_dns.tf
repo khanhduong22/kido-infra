@@ -15,7 +15,6 @@ locals {
     "kuma",
     "npm",
     "otel",
-    "portainer",
     "signoz",
     "tools",
     "gkg",

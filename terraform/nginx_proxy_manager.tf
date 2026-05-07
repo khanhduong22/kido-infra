@@ -8,7 +8,6 @@ locals {
     "grafana"   = { host = "grafana", port = 3000 }
     "dozzle"    = { host = "dozzle", port = 8080 }
     "kuma"      = { host = "uptime-kuma", port = 3001 } # Chú ý port nội bộ là 3001, pub là 3002
-    "portainer" = { host = "portainer", port = 9000 }
     "tools"     = { host = "it-tools", port = 80 }      # Chú ý port nội bộ là 80, pub là 8086
 
     "npm"       = { host = "nginx-proxy-manager", port = 81 }
