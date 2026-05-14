@@ -37,9 +37,9 @@ services:
       REDIS_URL: redis://redis:6379
       SECRET_KEY: change_this_to_a_random_string_for_production
       PORT: 8000
-      GLITCHTIP_DOMAIN: http://localhost:8000 # Change to your actual domain
+      GLITCHTIP_DOMAIN: https://sentry.khanhdp.com # Change to your actual domain
       DEFAULT_FROM_EMAIL: email@example.com
-      EMAIL_URL: console://
+      EMAIL_URL: consolemail://
     restart: unless-stopped
     networks:
       - ops_bridge
