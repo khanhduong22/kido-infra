@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgres:
+  glitchtip-postgres:
     image: postgres:15
     environment:
       POSTGRES_DB: glitchtip
@@ -15,26 +15,30 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - ops_bridge
 
-  redis:
+  glitchtip-redis:
     image: redis:7
     restart: unless-stopped
     volumes:
       - glitchtip-redis:/data
+    networks:
+      - ops_bridge
 
   web:
     image: glitchtip/glitchtip:latest
     container_name: glitchtip-web
     depends_on:
-      postgres:
+      glitchtip-postgres:
         condition: service_healthy
-      redis:
+      glitchtip-redis:
         condition: service_started
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgres://glitchtip:glitchtip_password@postgres:5432/glitchtip
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://glitchtip:glitchtip_password@glitchtip-postgres:5432/glitchtip
+      REDIS_URL: redis://glitchtip-redis:6379
       SECRET_KEY: change_this_to_a_random_string_for_production
       PORT: 8000
       GLITCHTIP_DOMAIN: https://sentry.khanhdp.com # Change to your actual domain
@@ -49,13 +53,13 @@ services:
     container_name: glitchtip-worker
     command: ./bin/run-celery-with-beat.sh
     depends_on:
-      postgres:
+      glitchtip-postgres:
         condition: service_healthy
-      redis:
+      glitchtip-redis:
         condition: service_started
     environment:
-      DATABASE_URL: postgres://glitchtip:glitchtip_password@postgres:5432/glitchtip
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgres://glitchtip:glitchtip_password@glitchtip-postgres:5432/glitchtip
+      REDIS_URL: redis://glitchtip-redis:6379
       SECRET_KEY: change_this_to_a_random_string_for_production
     restart: unless-stopped
     networks:
