@@ -66,6 +66,7 @@ services:
       - npm_letsencrypt:/etc/letsencrypt
     networks:
       - ops_bridge
+      - signoz-net
 
   it-tools:
     image: corentinth/it-tools:latest
@@ -144,6 +145,8 @@ services:
 
 networks:
   ops_bridge:
+    external: true
+  signoz-net:
     external: true
 
 volumes:
