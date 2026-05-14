@@ -16,6 +16,7 @@ locals {
     "gkg"       = { host = "gkg", port = 27495 }
     "12wy-api"  = { host = "12wy_api", port = 3001 }
     "p2p"       = { host = "vietnam-scraper-fe", port = 3001 }
+    "sentry"    = { host = "glitchtip-web", port = 8000 } # GlitchTip (Sentry) exposed port
   }
 }
 

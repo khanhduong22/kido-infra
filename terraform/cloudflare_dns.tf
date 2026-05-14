@@ -19,7 +19,8 @@ locals {
     "tools",
     "gkg",
     "12wy-api",
-    "p2p"
+    "p2p",
+    "sentry"
   ]
 }
 

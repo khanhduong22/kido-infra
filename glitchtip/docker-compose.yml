@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: glitchtip
+      POSTGRES_USER: glitchtip
+      POSTGRES_PASSWORD: glitchtip_password
+    volumes:
+      - glitchtip-postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U glitchtip"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    volumes:
+      - glitchtip-redis:/data
+
+  web:
+    image: glitchtip/glitchtip:latest
+    container_name: glitchtip-web
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://glitchtip:glitchtip_password@postgres:5432/glitchtip
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: change_this_to_a_random_string_for_production
+      PORT: 8000
+      GLITCHTIP_DOMAIN: http://localhost:8000 # Change to your actual domain
+      DEFAULT_FROM_EMAIL: email@example.com
+      EMAIL_URL: console://
+    restart: unless-stopped
+    networks:
+      - ops_bridge
+
+  worker:
+    image: glitchtip/glitchtip:latest
+    container_name: glitchtip-worker
+    command: ./bin/run-celery-with-beat.sh
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://glitchtip:glitchtip_password@postgres:5432/glitchtip
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: change_this_to_a_random_string_for_production
+    restart: unless-stopped
+    networks:
+      - ops_bridge
+
+  # ─── Cloudflare Tunnel (Khuyên dùng) ─────────────────────────
+  # Nếu dùng Cloudflare Tunnel thì không cần mở port trên VPS
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: glitchtip-cloudflared
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    depends_on:
+      - web
+    networks:
+      - ops_bridge
+
+networks:
+  ops_bridge:
+    external: true
+
+volumes:
+  glitchtip-postgres:
+  glitchtip-redis:
