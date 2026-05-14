@@ -1,0 +1,52 @@
+name: Deploy Infra to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into VPS and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/kido-infra
+            
+            # Lưu lại trạng thái hiện tại (nếu có conflict nhẹ)
+            git stash
+            
+            # Kéo code mới nhất từ nhánh main
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
+            
+            # Cập nhật Docker Compose cho các dịch vụ cốt lõi
+            # 1. Mạng chung và Nginx Proxy Manager (nếu dùng)
+            if [ -d "common" ]; then
+              cd common
+              docker compose up -d
+              cd ..
+            fi
+            
+            # 2. GlitchTip / Sentry
+            if [ -d "glitchtip" ]; then
+              cd glitchtip
+              docker compose up -d
+              cd ..
+            fi
+            
+            # 3. SigNoz (Tuỳ chọn - vì nặng nên có thể không tự up, chỉ pull code)
+            # if [ -d "signoz" ]; then
+            #   cd signoz
+            #   docker compose up -d
+            #   cd ..
+            # fi
+
+            echo "Deploy successful!"
